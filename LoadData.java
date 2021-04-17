@@ -73,7 +73,7 @@ public class LoadData {
                 String vaccDate = String.valueOf(dataArrayList.get(i).get(4));
                 String vaccLocation = String.valueOf(dataArrayList.get(i).get(5));
 
-                Employee employee = new Employee(
+                Patient employee = new Patient(
                     id,
                     lname,
                     fname,
