@@ -1,7 +1,9 @@
 import java.util.LinkedList;
 import java.io.FileWriter;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.BufferedReader;
 import java.io.File;
 
 public class Model {
@@ -11,17 +13,22 @@ public class Model {
     public void LoadData(File file){
         String path = file.toString(), line = "";
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(path));
-            String[] data = line.split(",");
-            Patient p = new Patient(Integer.parseInt(data[0]), data[1], data[2], data[3], data[4], data[5]);
-            list.add(p);
+			BufferedReader br = new BufferedReader(new FileReader(path));
+			line = br.readLine();
+            while ((line = br.readLine()) != null){
+                String[] data = line.split(",");
+                Patient p = new Patient(Integer.parseInt(data[0]), data[1], data[2], data[3], data[4], data[5]);
+                list.add(p);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void AddPatient(int id, String lastName, String firstName, String vaccType, String VaccDate, String vaccLocation){
-        Patient p = new Patient(id, lastName, firstName, vaccType, vaccDate, vaccLocation);
+    public void AddPatient(String[] data){
+        Patient p = new Patient(Integer.parseInt(data[0]), data[1], data[2], data[3], data[4], data[5]);
         list.add(p);
     }
 
