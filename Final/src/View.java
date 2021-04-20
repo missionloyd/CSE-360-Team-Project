@@ -20,7 +20,7 @@ public class View extends JFrame {
     
     View(){
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(800,480);
+        this.setSize(800,600);
         this.setTitle("CSE 360 FINAL PROJECT");
         this.setLayout(new BorderLayout());
         //Menu Panel
@@ -113,6 +113,7 @@ public class View extends JFrame {
     public void displayAboutPanel() {
     	if (blankPanel != null) {
     		this.remove(blankPanel);
+            blankPanel.removeAll();
     	}
     	
     	blankPanel = aboutPanel;
@@ -123,16 +124,24 @@ public class View extends JFrame {
     public void displayAddPanel() {
     	if(blankPanel != null) {
     		this.remove(blankPanel);
+            blankPanel.removeAll();
     	}
     	
-    	blankPanel = addPanel;
+    	blankPanel = new JPanel();
+    	blankPanel.add(addPanel);
     	this.add(blankPanel, BorderLayout.CENTER);
     	this.setVisible(true);
     }
     
     public String[] getDataFromAdd() {
     	String returnData[] = new String[6];
-    	
+
+    	try {
+    	    int test = Integer.parseInt(id.getText());
+        } catch (NumberFormatException e){
+    	    JOptionPane dummy = JOptionPane.g
+        }
+
     	returnData[0] = id.getText();
     	returnData[1] = lname.getText();
     	returnData[2] = fname.getText();
@@ -146,6 +155,7 @@ public class View extends JFrame {
     public void displayLoadError() {
     	if(blankPanel != null) {
     		this.remove(blankPanel);
+            blankPanel.removeAll();
     	}
     	
     	blankPanel = new JPanel();
@@ -161,14 +171,19 @@ public class View extends JFrame {
     	Data = newData;
     	if(blankPanel != null) {
     		this.remove(blankPanel);
+            blankPanel.removeAll();
     	}
     	displayTable();
     }
     
     public void displayTable() {
+        if(sp != null) {
+            sp.removeAll();
+        }
     	table = new JTable(Data, Columns);
     	sp = new JScrollPane(table);
     	sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        sp.setPreferredSize(new Dimension(600,480));
     	sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
     	blankPanel.add(sp);
     	this.add(blankPanel, BorderLayout.CENTER);
@@ -176,12 +191,13 @@ public class View extends JFrame {
     	
     }
 
-    public void creatCharts(int[] vaccTypes, Object[][] data, int size){
+    public void createCharts(int[] vaccTypes, Object[][] data, int size){
+        if(sp != null) {
+            sp.removeAll();
+        }
         if(blankPanel != null){
             this.remove(blankPanel);
-        }
-
-        if(sp != null){
+            blankPanel.removeAll();
         }
 
         chartPanel = new JPanel();
@@ -189,10 +205,11 @@ public class View extends JFrame {
         PieChart pie = new PieChart(data,size);
         chartPanel.add(bar);
         chartPanel.add(pie);
-        //sp = new JScrollPane(chartPanel);
-        //sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        //sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        blankPanel.add(chartPanel);
+        sp = new JScrollPane(chartPanel);
+        sp.setPreferredSize(new Dimension(600,480));
+        sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        blankPanel.add(sp);
         this.add(blankPanel, BorderLayout.CENTER);
         this.setVisible(true);
     }
