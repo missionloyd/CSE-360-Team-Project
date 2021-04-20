@@ -19,7 +19,7 @@ import javafx.scene.Group;
 /**
  * JavaFX App
  */
-public class App extends Application {
+public class barChart extends Application {
 
            
     @Override
