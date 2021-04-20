@@ -31,7 +31,13 @@ public class Model {
 	}
 
 	public void AddPatient(String[] data) {
-		Patient p = new Patient(Integer.parseInt(data[0]), data[1], data[2], data[3], data[4], data[5]);
+		Patient p;
+		try {
+			p = new Patient(Integer.parseInt(data[0]), data[1], data[2], data[3], data[4], data[5]);
+		} catch (NumberFormatException e){
+			e.printStackTrace();
+			p = new Patient(0, data[1], data[2], data[3], data[4], data[5]);
+		}
 		list.add(p);
 	}
 
@@ -50,50 +56,50 @@ public class Model {
 		return returnlist;
 	}
 
-	public int getNumDifferentDates(){
-		ArrayList<String> dates = new ArrayList<String>();
+	public int getNumDifferentLocations(){
+		ArrayList<String> locations = new ArrayList<String>();
 		for(int i = 0; i < list.size(); i++){
-			if(dates.size() == 0){
-				dates.add(list.get(i).getVaccineDate());
+			if(locations.size() == 0){
+				locations.add(list.get(i).getVaccineLocation());
 			} else {
 				boolean match = false;
-				for(int j = 0; j < dates.size(); j++){
-					if(dates.get(j).equals(list.get(i).getVaccineDate())){
+				for(int j = 0; j < locations.size(); j++){
+					if(locations.get(j).equals(list.get(i).getVaccineLocation())){
 						match = true;
 					}
 				}
 				if(!match) {
-					dates.add(list.get(i).getVaccineDate());
+					locations.add(list.get(i).getVaccineLocation());
 				}
 			}
 		}
-		return dates.size();
+		return locations.size();
 	}
 
-	public Object[][] getVaccinationbyDate(){
-		ArrayList<String> dates = new ArrayList<String>();
+	public Object[][] getVaccinationbyLocation(){
+		ArrayList<String> locations = new ArrayList<String>();
 		ArrayList<Integer> number = new ArrayList<Integer>();
 		for(int i = 0; i < list.size(); i++){
-			if(dates.size() == 0){
-				dates.add(list.get(i).getVaccineDate());
+			if(locations.size() == 0){
+				locations.add(list.get(i).getVaccineLocation());
 				number.add(1);
 			} else {
 				boolean match = false;
-				for(int j = 0; j < dates.size(); j++){
-					if(dates.get(j).equals(list.get(i).getVaccineDate())){
+				for(int j = 0; j < locations.size(); j++){
+					if(locations.get(j).equals(list.get(i).getVaccineLocation())){
 						number.set(j, number.get(j) + 1);
 						match = true;
 					}
 				}
 				if(!match){
-					dates.add(list.get(i).getVaccineDate());
+					locations.add(list.get(i).getVaccineLocation());
 					number.add(1);
 				}
 			}
 		}
-		Object[][] returnList = new Object[dates.size()][number.size()];
-		for(int i = 0; i < dates.size(); i++){
-			returnList[i][0] = dates.get(i);
+		Object[][] returnList = new Object[locations.size()][number.size()];
+		for(int i = 0; i < locations.size(); i++){
+			returnList[i][0] = locations.get(i);
 			returnList[i][1] = number.get(i);
 		}
 
