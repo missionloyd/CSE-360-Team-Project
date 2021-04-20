@@ -6,11 +6,12 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import java.io.File;
 
+
 public class View extends JFrame {
 
     private JButton buttonAbout, buttonAdd, buttonLoad, buttonVisualize, buttonSave, buttonConfirm;
     private JPanel menuPanel, blankPanel, aboutPanel, addPanel;
-    private JLabel aboutLabel, memberOne, memberTwo, memberThree, memberFour,askID, askFirstName, askLastName, askVaccType, askVaccDate,askVaccLocation;
+    private JLabel aboutLabel, memberOne, memberTwo, memberThree, memberFour,askID, askFirstName, askLastName, askVaccType, askVaccDate,askVaccLocation, loadError;
     private JTextField id, fname, lname, vaccType, vaccDate, vaccLoc;
     private JTable table;
     private JScrollPane sp;
@@ -19,18 +20,23 @@ public class View extends JFrame {
     
     View(){
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(600,400);
+        this.setSize(800,480);
         this.setTitle("CSE 360 FINAL PROJECT");
         this.setLayout(new BorderLayout());
         //Menu Panel
         menuPanel = new JPanel();
-        menuPanel.setPreferredSize(new Dimension(200,400));
+        menuPanel.setPreferredSize(new Dimension(200,480));
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.PAGE_AXIS));
         buttonAbout = new JButton("About");
+        buttonAbout.setAlignmentX(CENTER_ALIGNMENT);
         buttonLoad = new JButton("Load Data");
+        buttonLoad.setAlignmentX(CENTER_ALIGNMENT);
         buttonAdd = new JButton("Add Data");
+        buttonAdd.setAlignmentX(CENTER_ALIGNMENT);
         buttonSave = new JButton("Save Data");
+        buttonSave.setAlignmentX(CENTER_ALIGNMENT);
         buttonVisualize = new JButton("Visualize Data");
+        buttonVisualize.setAlignmentX(CENTER_ALIGNMENT);
 
         menuPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         menuPanel.add(buttonAbout);
@@ -46,7 +52,7 @@ public class View extends JFrame {
         
         //About Panel
         aboutPanel = new JPanel();
-        aboutPanel.setPreferredSize(new Dimension(400,400));
+        aboutPanel.setPreferredSize(new Dimension(600,480));
         aboutPanel.setLayout(new BoxLayout(aboutPanel, BoxLayout.Y_AXIS));
         aboutLabel = new JLabel("Team Members:");
         aboutLabel.setAlignmentX(CENTER_ALIGNMENT);
@@ -67,7 +73,7 @@ public class View extends JFrame {
         
         //Add Panel
         addPanel = new JPanel(new GridLayout(7,2));
-        addPanel.setPreferredSize(new Dimension(40,400));
+        addPanel.setPreferredSize(new Dimension(600,480));
         id = new JTextField(15);
         lname = new JTextField(20);
         fname = new JTextField(20);
@@ -96,6 +102,9 @@ public class View extends JFrame {
         addPanel.add(new JLabel(""));
         addPanel.add(buttonConfirm);
         
+        //Load Error Message
+        loadError = new JLabel("ERROR: file either not supported or no file selected. Try Again!");
+        
         this.add(menuPanel, BorderLayout.LINE_START);
         this.add(blankPanel, BorderLayout.CENTER);
         
@@ -106,8 +115,7 @@ public class View extends JFrame {
     		this.remove(blankPanel);
     	}
     	
-    	blankPanel = new JPanel();
-    	blankPanel.add(aboutLabel);
+    	blankPanel = aboutPanel;
     	this.add(blankPanel, BorderLayout.CENTER);
     	this.setVisible(true);
     }
@@ -135,12 +143,25 @@ public class View extends JFrame {
     	return returnData;
     }
     
+    public void displayLoadError() {
+    	if(blankPanel != null) {
+    		this.remove(blankPanel);
+    	}
+    	
+    	blankPanel = new JPanel();
+    	loadError.setAlignmentX(CENTER_ALIGNMENT);
+    	loadError.setAlignmentY(CENTER_ALIGNMENT);
+    	blankPanel.add(loadError);
+    	
+    	this.add(blankPanel, BorderLayout.CENTER);
+    	this.setVisible(true);
+    }
+    
     public void update(Object[][] newData) {
     	Data = newData;
     	if(blankPanel != null) {
     		this.remove(blankPanel);
     	}
-    	blankPanel = new JPanel();
     	displayTable();
     }
     
@@ -152,12 +173,35 @@ public class View extends JFrame {
     	blankPanel.add(sp);
     	this.add(blankPanel, BorderLayout.CENTER);
     	this.setVisible(true);
+    	
     }
+    
+    public void createBarChart(int[] itemList) {
+    	if(blankPanel != null) {
+    		this.remove(blankPanel);
+    	}
+    	BarChart test = new BarChart(itemList);
+    	blankPanel = test;
+    	this.add(blankPanel);
+    	this.setVisible(true);
+    }
+
+    public void createPieChart(Object[][] data, int size){
+        if(blankPanel != null) {
+            this.remove(blankPanel);
+        }
+        PieChart test = new PieChart(data, size);
+        blankPanel = test;
+        this.add(blankPanel);
+        this.setVisible(true);
+    }
+    
     
     public File getFile() {
         File file;
         JFileChooser chooser = new JFileChooser(".");
         chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        chooser.setFileFilter(new CSVFilter());
         int response = chooser.showOpenDialog(null);
 
         if(response == JFileChooser.APPROVE_OPTION){

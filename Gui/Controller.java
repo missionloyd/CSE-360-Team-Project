@@ -4,6 +4,7 @@ import javax.swing.JOptionPane;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.File;
 
 public class Controller{
 
@@ -30,11 +31,18 @@ public class Controller{
                 root.update(model.getPatientList());
             }
             if(e.getActionCommand() == "Load Data"){
-                model.LoadData(root.getFile());
-                root.update(model.getPatientList());
+            	File file = root.getFile();
+            	
+            	if(file !=null) {
+            		model.LoadData(file);
+            		root.update(model.getPatientList());
+            	} else {
+            		root.displayLoadError();
+            	}
             }
             if(e.getActionCommand() == "Visualize Data"){
-                
+                //root.createBarChart(model.getVaccCount());
+                root.createPieChart(model.getVaccinationbyDate(), model.getNumDifferentDates());
             }
             if(e.getActionCommand() == "Confirm") {
             	model.AddPatient(root.getDataFromAdd());
